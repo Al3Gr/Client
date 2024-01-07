@@ -83,10 +83,16 @@ namespace Client.Services
                 return false;
         }
 
-        public async Task<List<PhotoInfoModel>> GetPosts (string query, int skip)
+        public async Task<List<PhotoInfoModel>> GetPosts(string query, int skip)
         {
 
-            HttpResponseMessage risposta = await TalkWithServer(HttpMethod.Get, urlServer + "upload");
+            string endpoint = "get?";
+            if (!string.IsNullOrEmpty(query))
+                endpoint += "tag=" + query + "&";
+            if (skip > 0)
+                endpoint += "skip=" + skip;
+
+            HttpResponseMessage risposta = await TalkWithServer(HttpMethod.Get, urlServer + endpoint);
 
             if (risposta.IsSuccessStatusCode)
                 return Utility.DeserializeJSON<List<PhotoInfoModel>>(await risposta.Content.ReadAsStringAsync());
