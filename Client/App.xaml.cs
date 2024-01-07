@@ -9,18 +9,9 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        Inizializzazione();
+        MainPage = new AppShell();
+
     }
 
-    private async void Inizializzazione()
-    {
-        if (UserService.Instance.IsUserSigned())
-            if (await RestService.Instance.Login(UserService.Instance.Username, UserService.Instance.Password))
-            {
-                MainPage = new MainTabbedPage();
-                return;
-            }
-
-        MainPage = new NavigationPage(new LoginPage());
-    }
+   
 }

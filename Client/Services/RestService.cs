@@ -24,10 +24,15 @@ namespace Client.Services
 
         private const string urlServer = "http://localhost:1984/";
 
-        private readonly HttpClient _client = new HttpClient()
+        private readonly HttpClient _client;
+
+        public RestService()
         {
-            MaxResponseContentBufferSize = 10 * 1024 * 1024
-        };
+            _client = new HttpClient()
+            {
+                MaxResponseContentBufferSize = 10 * 1024 * 1024
+            };
+        }
 
         public async Task<bool> Login(string username, string password)
         {
