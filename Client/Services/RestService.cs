@@ -89,8 +89,9 @@ namespace Client.Services
         {
             try
             {
-                if (!string.IsNullOrEmpty(UserService.Instance.Token))
-                    _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("", UserService.Instance.Token);
+                //if (!string.IsNullOrEmpty(UserService.Instance.Token))
+                   
+                //    _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", UserService.Instance.Token);
 
                 HttpRequestMessage richiesta = new HttpRequestMessage
                 {
@@ -98,6 +99,8 @@ namespace Client.Services
                     RequestUri = new Uri(url),
                     Content = null,
                 };
+                if (!string.IsNullOrEmpty(UserService.Instance.Token))
+                    richiesta.Headers.Add("Authorization", UserService.Instance.Token);
                 if (!string.IsNullOrEmpty(json))
                     richiesta.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
