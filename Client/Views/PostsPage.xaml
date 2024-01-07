@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Client.Views.PostsPage"
@@ -8,7 +8,11 @@
              x:DataType="vm:PostsViewModel">
 
     <Grid>
-        <CollectionView Margin="20, 0" ItemsSource="{Binding Posts}">
+        <CollectionView Margin="20, 0" ItemsSource="{Binding Posts}" >
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"/>
+
+            </CollectionView.ItemsLayout>
             <CollectionView.Header>
                 <HorizontalStackLayout>
                     <Picker x:Name="pickerTags" SelectedItem="{Binding Source={RelativeSource AncestorType={x:Type vm:PostsViewModel}}, Path=PickerSelection}" />
@@ -27,12 +31,12 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <Label Text="{Binding username}" FontSize="Medium" />
+                            <Label Text="{Binding username}" TextColor="Blue" FontSize="Medium" />
 
-                            <Image Grid.Row="1" Source="{Binding Image}" VerticalOptions="Fill" HorizontalOptions="Fill" Aspect="AspectFit" BackgroundColor="Black"/>
+                            <Image Grid.Row="1" Source="{Binding Image}" VerticalOptions="Fill" HorizontalOptions="Fill" Aspect="AspectFit" BackgroundColor="White"/>
 
-                            <Label Grid.Row="2" Text="{Binding description, StringFormat='Descrizione: 0'}" FontSize="Small" />
-                            <Label Grid.Row="3" Text="{Binding description, StringFormat='Descrizione: 0'}" FontSize="Small" />
+                            <Label Grid.Row="2" Text="{Binding TagsString, StringFormat='Tags: {0}'}" TextColor="Blue" FontSize="Small" />
+                            <Label Grid.Row="3" Text="{Binding description, StringFormat='Descrizione: {0}'}" TextColor="Blue" FontSize="Small" />
 
                         </Grid>
                     </Frame>

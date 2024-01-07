@@ -95,7 +95,10 @@ namespace Client.Services
             HttpResponseMessage risposta = await TalkWithServer(HttpMethod.Get, urlServer + endpoint);
 
             if (risposta.IsSuccessStatusCode)
-                return Utility.DeserializeJSON<List<PhotoInfoModel>>(await risposta.Content.ReadAsStringAsync());
+            {
+                var stringa = await risposta.Content.ReadAsStringAsync();
+                return Utility.DeserializeJSON<List<PhotoInfoModel>>(stringa);
+            }    
             else
                 throw new RestServiceException(risposta);
         }
