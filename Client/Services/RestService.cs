@@ -42,7 +42,10 @@ namespace Client.Services
                 password = password
             });
             if (risposta.IsSuccessStatusCode)
+            {
+                UserService.Instance.Token = await risposta.Content.ReadAsStringAsync();
                 return true;
+            }
             else
                 return false;
         }
@@ -55,7 +58,10 @@ namespace Client.Services
                 password = password
             });
             if (risposta.IsSuccessStatusCode)
+            {
+                UserService.Instance.Token = await risposta.Content.ReadAsStringAsync();
                 return true;
+            }
             else
                 return false;
         }
@@ -96,12 +102,6 @@ namespace Client.Services
                     richiesta.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 HttpResponseMessage risposta = await _client.SendAsync(richiesta);
-
-                if (risposta.IsSuccessStatusCode)
-                {
-                    if (risposta.Headers.TryGetValues("X-Token", out IEnumerable<string> stringhe))
-                        UserService.Instance.Token = stringhe.FirstOrDefault();
-                }
 
                 return risposta;
             }
