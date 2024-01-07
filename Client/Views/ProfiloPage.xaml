@@ -13,12 +13,14 @@
 
             <VerticalStackLayout x:Name="DatiStack" VerticalOptions="CenterAndExpand" Margin="40,0,40,0">
 
-                <Entry Text="{Binding Username}"/>
+                <Label Text="{Binding Username}"/>
 
                 <Entry Placeholder="Descrizione" Text="{Binding Description}" />
 
-                <Image Source="{Binding ImageSource}"/>
-                
+                <Frame HeightRequest="150" WidthRequest="150" CornerRadius="75" BackgroundColor="White" HorizontalOptions="Center" VerticalOptions="Start" Padding="0">
+                    <Image Source="{Binding ImageSource}" Aspect="AspectFill" HeightRequest="150" WidthRequest="150"/>
+                </Frame>
+
                 <Button Text="Scegli immagine" Command="{Binding PickImage}" HorizontalOptions="Fill" Margin="0,20,0,0" Padding="15, 5" BackgroundColor="Orange"/>
 
                 <Button Text="Carica immagine" IsEnabled="{Binding IsNotLoading}" Command="{Binding Upload}" HorizontalOptions="Fill" Margin="0,20,0,0" Padding="15, 5" BackgroundColor="Orange"/>

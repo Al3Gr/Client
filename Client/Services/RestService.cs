@@ -1,4 +1,5 @@
-﻿using Client.Models;
+﻿using Client.Exceptions;
+using Client.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,12 +67,12 @@ namespace Client.Services
                 return false;
         }
 
-        public async Task<bool> UploadImage(string username, string description, byte[] image)
+        public async Task<bool> UploadImage(string description, byte[] image)
         {
 
             HttpResponseMessage risposta = await TalkWithServerJson(HttpMethod.Post, urlServer + "upload", new ImageUploadModel
             {
-                username = username,
+                username = UserService.Instance.Username,
                 description = description,
                 image = Convert.ToBase64String(image)
             });
@@ -82,22 +83,30 @@ namespace Client.Services
                 return false;
         }
 
+        public async Task<List<PhotoInfoModel>> GetPosts (string query, int skip)
+        {
+
+            HttpResponseMessage risposta = await TalkWithServer(HttpMethod.Get, urlServer + "upload");
+
+            if (risposta.IsSuccessStatusCode)
+                return Utility.DeserializeJSON<List<PhotoInfoModel>>(await risposta.Content.ReadAsStringAsync());
+            else
+                throw new RestServiceException(risposta);
+        }
+
         // --------------- Talk with server ---------------
+        private async Task<HttpResponseMessage> TalkWithServer(HttpMethod httpVerb, string url) => await TalkWithServerFinally(httpVerb, url, null);
         private async Task<HttpResponseMessage> TalkWithServerJson(HttpMethod httpVerb, string url, object request) => await TalkWithServerFinally(httpVerb, url, Utility.SerializeJSON(request));
 
         private async Task<HttpResponseMessage> TalkWithServerFinally(HttpMethod httpVerb, string url, string json)
         {
             try
             {
-                //if (!string.IsNullOrEmpty(UserService.Instance.Token))
-                   
-                //    _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", UserService.Instance.Token);
-
                 HttpRequestMessage richiesta = new HttpRequestMessage
                 {
                     Method = httpVerb,
                     RequestUri = new Uri(url),
-                    Content = null,
+                    Content = null
                 };
                 if (!string.IsNullOrEmpty(UserService.Instance.Token))
                     richiesta.Headers.Add("Authorization", UserService.Instance.Token);

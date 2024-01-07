@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace Client.Views.ViewModels
 {
-    public class ProfiloViewModel
+    public class ProfiloViewModel : INotifyPropertyChanged
     {
 
         private string description;
@@ -49,7 +49,7 @@ namespace Client.Views.ViewModels
 
         public ImageSource ImageSource { get {
                 if (image == null)
-                    return ImageSource.FromFile(""); //immagine per "NO FOTO"
+                    return ImageSource.FromFile("nofoto.png"); //immagine per "NO FOTO"
                 return ImageSource.FromStream(() => new MemoryStream(image));
             }
         }
@@ -82,7 +82,7 @@ namespace Client.Views.ViewModels
 
             IsLoading = true;
 
-            if (await RestService.Instance.UploadImage(Username, Description, image))
+            if (await RestService.Instance.UploadImage(Description, image))
             {
                 Description = "";
 
