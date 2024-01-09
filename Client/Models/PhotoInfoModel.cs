@@ -64,7 +64,7 @@ namespace Client.Models
 
         public Color LikeColor
         {
-            get => HasMyLike ? Colors.Blue : Colors.White;
+            get => HasMyLike ? Colors.Blue : Colors.Black;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
