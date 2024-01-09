@@ -44,7 +44,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <ImageButton Source="mipiace.png" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PostsViewModel}}, Path=LikePost}" CommandParameter="{Binding .}">
+                                <ImageButton WidthRequest="40" HeightRequest="40" Source="mipiace.png" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PostsViewModel}}, Path=LikePost}" CommandParameter="{Binding .}">
                                     <ImageButton.Behaviors>
                                         <toolkit:IconTintColorBehavior TintColor="{Binding LikeColor}"/>
                                     </ImageButton.Behaviors>
