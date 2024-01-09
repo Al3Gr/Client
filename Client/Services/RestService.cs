@@ -109,7 +109,7 @@ namespace Client.Services
             HttpResponseMessage risposta = await TalkWithServerJson(HttpMethod.Put, urlServer + "like", new LikePostModel()
             {
                 id = id,
-                like = like ? "true" : "false"
+                like = like ? "1" : "0"
             });
 
             if (risposta.IsSuccessStatusCode)
