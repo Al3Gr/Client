@@ -98,9 +98,24 @@ namespace Client.Services
             {
                 var stringa = await risposta.Content.ReadAsStringAsync();
                 return Utility.DeserializeJSON<List<PhotoInfoModel>>(stringa);
-            }    
+            }
             else
                 throw new RestServiceException(risposta);
+        }
+
+        public async Task<bool> LikePost(string id, bool like)
+        {
+
+            HttpResponseMessage risposta = await TalkWithServerJson(HttpMethod.Put, urlServer + "like", new LikePostModel()
+            {
+                id = id,
+                like = like ? "true" : "false"
+            });
+
+            if (risposta.IsSuccessStatusCode)
+                return true;
+            else
+                return false;
         }
 
         // --------------- Talk with server ---------------

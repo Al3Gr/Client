@@ -8,8 +8,6 @@ public partial class PostsPage : ContentPage
 	{
 		InitializeComponent();
 
-		pickerTags.ItemsSource = new List<string>() { "prova", "test" };
-
 		BindingContext = new PostsViewModel(this, "");
 
 	}

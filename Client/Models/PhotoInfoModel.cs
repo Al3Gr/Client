@@ -1,19 +1,23 @@
-﻿using Newtonsoft.Json;
+﻿using Client.Services;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Client.Models
 {
-    public class PhotoInfoModel
+    public class PhotoInfoModel : INotifyPropertyChanged
     {
+        public ObjectID _id { get; set; }
         public string username { get; set; }
         public string description { get; set; }
         public string url { get; set; }
         public List<string> tags { get; set; }
+        public List<string> likes { get; set; }
 
         public ImageSource Image
         {
@@ -47,7 +51,39 @@ namespace Client.Models
             }
         }
 
+        public bool HasMyLike
+        {
+            get
+            {
+                string username = UserService.Instance.Username;
+                if (username == null)
+                    return false;
+                return likes.Contains(username);
+            }
+        }
+
+        public Color LikeColor
+        {
+            get => HasMyLike ? Colors.Blue : Colors.White;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyHasMyLikeChanged() => NotifyPropertyChanged(nameof(LikeColor));
+
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
         [JsonExtensionData]
         public IDictionary<string, JToken> AdditionalData { get; set; }
+    }
+
+    public class ObjectID
+    {
+        [JsonProperty("$oid")]
+        public string Id { get; set; }
     }
 }

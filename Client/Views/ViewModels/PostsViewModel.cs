@@ -23,7 +23,7 @@ namespace Client.Views.ViewModels
 
         private ObservableCollection<PhotoInfoModel> posts;
         private bool isLoading;
-        private string pickerSelection;
+        private string searchQuery;
 
         public ObservableCollection<PhotoInfoModel> Posts
         {
@@ -51,28 +51,30 @@ namespace Client.Views.ViewModels
             get => !isLoading;
         }
 
-        public string PickerSelection
+        public string SearchQuery
         {
-            get => pickerSelection;
+            get => searchQuery;
             set
             {
-                pickerSelection = value;
-                NotifyPropertyChanged(nameof(PickerSelection));
+                searchQuery = value;
+                NotifyPropertyChanged(nameof(SearchQuery));
             }
         }
 
         public ICommand Search { get; set; }
         public ICommand SearchMore { get; set; }
+        public ICommand LikePost { get; set; }
 
         public PostsViewModel(Page pageBinded, string queryTag)
         {
             this.pageBinded = pageBinded;
             this.queryTag = queryTag;
-            PickerSelection = queryTag;
+            SearchQuery = queryTag;
             pageNumber = 0;
 
             Search = new Command(SearchClicked);
             SearchMore = new Command(SearchMoreHandler);
+            LikePost = new Command(LikePostHandler);
 
             DownloadPost(0);
         }
@@ -107,13 +109,35 @@ namespace Client.Views.ViewModels
 
         private void SearchClicked()
         {
-            if (PickerSelection != queryTag)
-                pageBinded.BindingContext = new PostsViewModel(pageBinded, PickerSelection);
+            if (SearchQuery != queryTag)
+                pageBinded.BindingContext = new PostsViewModel(pageBinded, SearchQuery);
         }
 
         private void SearchMoreHandler()
         {
             DownloadPost((++pageNumber) * 10);
+        }
+
+        private async void LikePostHandler(object sender)
+        {
+            PhotoInfoModel post = sender as PhotoInfoModel;
+
+            if (post == null)
+                return;
+
+            bool like = !post.HasMyLike;
+            if (await RestService.Instance.LikePost(post._id.Id, like))
+            {
+                if (like)
+                    post.likes.Add(UserService.Instance.Username);
+                else
+                    post.likes.Remove(UserService.Instance.Username);
+
+                //notifico alla GUI
+                post.NotifyHasMyLikeChanged();
+            }
+            else
+                await App.Current.MainPage.DisplayAlert("Attenzione", "Qualcosa è andata storto!", "Ok");
         }
 
     }
