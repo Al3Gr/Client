@@ -15,9 +15,9 @@
 
             </CollectionView.ItemsLayout>
             <CollectionView.Header>
-                <HorizontalStackLayout>
+
                     <SearchBar Text="{Binding SearchQuery}" HorizontalOptions="Fill" SearchCommand="{Binding Search}" TextColor="Black"/>
-                </HorizontalStackLayout>
+
             </CollectionView.Header>
 
             <CollectionView.ItemTemplate>
@@ -34,7 +34,7 @@
 
                             <Image Grid.Row="1" Source="{Binding Image}" VerticalOptions="Fill" HorizontalOptions="Fill" Aspect="AspectFit" BackgroundColor="White"/>
 
-                            <Grid Grid.Row="2">
+                            <Grid Grid.Row="2" ColumnSpacing="10">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
@@ -44,7 +44,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <ImageButton WidthRequest="40" HeightRequest="40" Source="mipiace.png" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PostsViewModel}}, Path=LikePost}" CommandParameter="{Binding .}">
+                                <ImageButton WidthRequest="40" HeightRequest="40" VerticalOptions="Center" Source="mipiace.png" BackgroundColor="{Binding LikeColor}" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PostsViewModel}}, Path=LikePost}" CommandParameter="{Binding .}">
                                     <ImageButton.Behaviors>
                                         <toolkit:IconTintColorBehavior TintColor="{Binding LikeColor}"/>
                                     </ImageButton.Behaviors>
