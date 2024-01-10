@@ -140,5 +140,10 @@ namespace Client.Views.ViewModels
                 await App.Current.MainPage.DisplayAlert("Attenzione", "Qualcosa è andata storto!", "Ok");
         }
 
+        public void Refresh()
+        {
+            pageBinded.BindingContext = new PostsViewModel(pageBinded, queryTag);
+        }
+
     }
 }

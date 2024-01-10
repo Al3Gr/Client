@@ -16,7 +16,7 @@
             </CollectionView.ItemsLayout>
             <CollectionView.Header>
                 <HorizontalStackLayout>
-                    <SearchBar Text="{Binding SearchQuery}" HorizontalOptions="Fill" SearchCommand="{Binding Search}"/>
+                    <SearchBar Text="{Binding SearchQuery}" HorizontalOptions="Fill" SearchCommand="{Binding Search}" TextColor="Black"/>
                 </HorizontalStackLayout>
             </CollectionView.Header>
 
