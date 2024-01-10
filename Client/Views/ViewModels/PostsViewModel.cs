@@ -109,8 +109,15 @@ namespace Client.Views.ViewModels
 
         private void SearchClicked()
         {
-            if (SearchQuery != queryTag)
-                pageBinded.BindingContext = new PostsViewModel(pageBinded, SearchQuery);
+            if (SearchQuery == queryTag)
+                return;
+            string tag = ImagenetService.Instance.FindTag(queryTag);
+            if (string.IsNullOrEmpty(tag))
+            {
+                App.Current.MainPage.DisplayAlert("Attenzione!", "Tag inesistente!", "Ok");
+                return;
+            }
+            pageBinded.BindingContext = new PostsViewModel(pageBinded, tag);
         }
 
         private void SearchMoreHandler()

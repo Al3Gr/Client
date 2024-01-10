@@ -54,12 +54,17 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 	<ItemGroup>
+	  <None Remove="Resources\Images\icona.png" />
+	  <None Remove="Resources\Images\logout.png" />
 	  <None Remove="Resources\Images\mipiace.png" />
 	  <None Remove="Resources\Images\nofoto.png" />
+	  <None Remove="Resources\Images\nomipiace.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="imagenet_classes.txt" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="6.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>

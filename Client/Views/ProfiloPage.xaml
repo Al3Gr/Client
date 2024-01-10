@@ -13,11 +13,13 @@
 
             <VerticalStackLayout x:Name="DatiStack" VerticalOptions="CenterAndExpand" Margin="40,0,40,0">
 
+                <Button Text="Disconnettiti" Command="{Binding PickImage}" HorizontalOptions="Fill" Margin="0,20,0,0" Padding="15, 5" BackgroundColor="Orange"/>
+                
                 <Label Text="{Binding Username}"/>
 
                 <Entry Placeholder="Descrizione" Text="{Binding Description}" />
 
-                <Frame HeightRequest="150" WidthRequest="150" CornerRadius="75" BackgroundColor="White" HorizontalOptions="Center" VerticalOptions="Start" Padding="0">
+                <Frame HeightRequest="150" WidthRequest="150" CornerRadius="75" BackgroundColor="White" HorizontalOptions="Center" VerticalOptions="Start" Padding="0" IsClippedToBounds="True">
                     <Image Source="{Binding ImageSource}" Aspect="AspectFill" HeightRequest="150" WidthRequest="150"/>
                 </Frame>
 

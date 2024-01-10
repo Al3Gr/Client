@@ -62,9 +62,9 @@ namespace Client.Models
             }
         }
 
-        public Color LikeColor
+        public ImageSource LikeColor
         {
-            get => HasMyLike ? Colors.Blue : Colors.Black;
+            get => HasMyLike ? ImageSource.FromFile("mipiace.png") : ImageSource.FromFile("nomipiace.png");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -56,6 +56,7 @@ namespace Client.Views.ViewModels
 
         public ICommand PickImage { get; set; }
         public ICommand Upload { get; set; }
+        public ICommand Logout { get; set; }
 
         public ProfiloViewModel()
         {
@@ -63,6 +64,11 @@ namespace Client.Views.ViewModels
 
             PickImage = new Command(PickImageClicked);
             Upload = new Command(UploadImageClicked);
+            Logout = new Command(() =>
+            {
+                UserService.Instance.Logout();
+                App.Current.MainPage = new AppShell();
+            });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
