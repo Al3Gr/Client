@@ -8,10 +8,13 @@ public partial class PostsPage : ContentPage
 	{
 		InitializeComponent();
 
-		BindingContext = new PostsViewModel(this, "");
+        //effettuo il binding della page con la viewmodel e inserisco nessun tag
+        BindingContext = new PostsViewModel(this, "");
 
 	}
 
+    //metodo chiamato nel momento in cui la pagina appare a schermo
+    //utile quando carico una nuova immagine e voglio vederla immediatamente
     protected override void OnAppearing()
     {
         base.OnAppearing();

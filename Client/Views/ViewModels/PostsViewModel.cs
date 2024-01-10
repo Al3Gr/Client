@@ -21,6 +21,7 @@ namespace Client.Views.ViewModels
         private string queryTag;
         private int pageNumber;
 
+        //l'observableCollection notifica in automatico nel caso di aggiunta/rimozione di post
         private ObservableCollection<PhotoInfoModel> posts;
         private bool isLoading;
         private string searchQuery;
@@ -35,6 +36,7 @@ namespace Client.Views.ViewModels
             }
         }
 
+        //proprietà per indicare che la finestra sta caricando
         public bool IsLoading
         {
             get => isLoading;
@@ -51,6 +53,7 @@ namespace Client.Views.ViewModels
             get => !isLoading;
         }
 
+        //proprietà che rappresenta la query cercata dal cliente
         public string SearchQuery
         {
             get => searchQuery;
@@ -88,7 +91,7 @@ namespace Client.Views.ViewModels
                 var lista = await RestService.Instance.GetPosts(queryTag, skip);
                 if (skip == 0)
                     Posts = new ObservableCollection<PhotoInfoModel>(lista);
-                else
+                else //ho cliccato more...
                     foreach (var post in lista)
                         Posts.Add(post);
             }
@@ -102,6 +105,7 @@ namespace Client.Views.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        //metodo per notificare gli observer che osservano l'evento PropertyChanged
         private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -109,24 +113,29 @@ namespace Client.Views.ViewModels
 
         private void SearchClicked()
         {
+            //se è uguale al precedente non cambio nulla
             if (SearchQuery == queryTag)
                 return;
+            //trovo il tag che metcha la richiesta dell'utente
             string tag = ImagenetService.Instance.FindTag(queryTag);
             if (string.IsNullOrEmpty(tag))
             {
                 App.Current.MainPage.DisplayAlert("Attenzione!", "Tag inesistente!", "Ok");
                 return;
             }
+            //ricarico il contenuto della pagina con le nuove informazioni
             pageBinded.BindingContext = new PostsViewModel(pageBinded, tag);
         }
 
         private void SearchMoreHandler()
         {
+            //scarico i nuovi post, ogni get restituisce gli ultimi dieci risultati quindi lo skip è di 10
             DownloadPost((++pageNumber) * 10);
         }
 
         private async void LikePostHandler(object sender)
         {
+            //prendo il post da cui è stato cliccato il tasto like
             PhotoInfoModel post = sender as PhotoInfoModel;
 
             if (post == null)
@@ -135,6 +144,7 @@ namespace Client.Views.ViewModels
             bool like = !post.HasMyLike;
             if (await RestService.Instance.LikePost(post._id.Id, like))
             {
+                //se l'operazione và a buon fine aggiungo o rimuovo il like nell'applicazione
                 if (like)
                     post.likes.Add(UserService.Instance.Username);
                 else
@@ -147,6 +157,7 @@ namespace Client.Views.ViewModels
                 await App.Current.MainPage.DisplayAlert("Attenzione", "Qualcosa è andata storto!", "Ok");
         }
 
+        //utilizzato per refreshare tutta la pagina con gli ultimi contenuti più attuali
         public void Refresh()
         {
             pageBinded.BindingContext = new PostsViewModel(pageBinded, queryTag);

@@ -8,6 +8,7 @@ public partial class SignupPage : ContentPage
 	{
 		InitializeComponent();
 
-		BindingContext = new SignupViewModel();
+        //effettuo il binding della page con la viewmodel 
+        BindingContext = new SignupViewModel();
 	}
 }

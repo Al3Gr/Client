@@ -6,6 +6,9 @@ public partial class ProfiloPage : ContentPage
 	public ProfiloPage()
 	{
 		InitializeComponent();
-		BindingContext = new ProfiloViewModel();
+
+
+        //effettuo il binding della page con la viewmodel 
+        BindingContext = new ProfiloViewModel();
 	}
 }

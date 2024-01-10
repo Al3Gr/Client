@@ -19,6 +19,7 @@ namespace Client.Models
         public List<string> tags { get; set; }
         public List<string> likes { get; set; }
 
+        //utilizzata dall'interfaccia grafica per visualizzare l'immagine dall'url
         public ImageSource Image
         {
             get
@@ -29,11 +30,13 @@ namespace Client.Models
                 }
                 catch (Exception)
                 {
+                    //nel caso in cui l'url non esista o generi errori visualizzo un'immagine di default
                     return ImageSource.FromFile("nofoto.png");
                 }
             }
         }
 
+        //utilizzata dall'interfaccia grafica per visualizzare la stringa con i tag collegati all'immagine
         public string TagsString
         {
             get
@@ -51,6 +54,7 @@ namespace Client.Models
             }
         }
 
+        //restituisce se l'utente loggato ha messo like al post
         public bool HasMyLike
         {
             get
@@ -62,11 +66,13 @@ namespace Client.Models
             }
         }
 
+        //utilizzata dall'interfaccia grafica per visualizzare la presenza del proprio like
         public ImageSource LikeImageSource
         {
             get => HasMyLike ? ImageSource.FromFile("mipiace.png") : ImageSource.FromFile("nomipiace.png");
         }
 
+        //utilizzata dall'interfaccia grafica per visualizzare il numero di like del post
         public int NLike
         {
             get => likes.Count();
@@ -74,18 +80,21 @@ namespace Client.Models
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        //utilizzata dalla view model per notificare i cambiamenti delle informazioni sui like del post
         public void NotifyHasMyLikeChanged()
         {
             NotifyPropertyChanged(nameof(LikeImageSource));
             NotifyPropertyChanged(nameof(NLike));
         }
 
+        //metodo per notificare gli observer che osservano l'evento PropertyChanged
         private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
+        //metodo per evitare che il parsing del json dia errore a causa di proprietà in più date dal server
         [JsonExtensionData]
         public IDictionary<string, JToken> AdditionalData { get; set; }
     }

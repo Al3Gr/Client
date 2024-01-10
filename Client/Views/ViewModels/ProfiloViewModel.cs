@@ -17,6 +17,7 @@ namespace Client.Views.ViewModels
         private string description;
         private bool isLoading;
 
+        //proprietà per indicare che la finestra sta caricando
         public bool IsLoading
         {
             get => isLoading;
@@ -41,12 +42,14 @@ namespace Client.Views.ViewModels
             set
             {
                 description = value;
+                //utilizzata per refreshare la GUI quando resetto la descrizione dopo l'upload con successo
                 NotifyPropertyChanged(nameof(Description));
             }
         }
 
         private byte[] image;
 
+        //utilizzata dall'interfaccia grafica per visualizzare l'immagine selezionata
         public ImageSource ImageSource { get {
                 if (image == null)
                     return ImageSource.FromFile("nofoto.png"); //immagine per "NO FOTO"
@@ -73,6 +76,7 @@ namespace Client.Views.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        //metodo per notificare gli observer che osservano l'evento PropertyChanged
         private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -90,6 +94,7 @@ namespace Client.Views.ViewModels
 
             if (await RestService.Instance.UploadImage(Description, image))
             {
+                //resetto le informazioni per la creazione di un post
                 Description = "";
 
                 image = null;
@@ -105,6 +110,7 @@ namespace Client.Views.ViewModels
 
         private async void PickImageClicked()
         {
+            //con .net maui prendo un'immagine dal dispositivo
             FileResult file = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
             {
                 Title = "Seleziona un'immagine"
@@ -112,12 +118,14 @@ namespace Client.Views.ViewModels
 
             if (file != null)
             {
+                //apro il file
                 var imageStream = File.OpenRead(file.FullPath);
 
                 image = new byte[imageStream.Length];
                 imageStream.Position = 0;
-                imageStream.Read(image, 0, image.Length);
+                imageStream.Read(image, 0, image.Length); //leggo i byte
 
+                //notifico il cambiamento dell'immagine per la visualizzazione prima dell'upoload
                 NotifyPropertyChanged(nameof(ImageSource));
             }
         }

@@ -13,6 +13,7 @@ namespace Client.Views.ViewModels
     {
         private bool isLoading;
 
+        //proprietà per indicare che la finestra sta caricando
         public bool IsLoading
         {
             get => isLoading;
@@ -45,6 +46,7 @@ namespace Client.Views.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        //metodo per notificare gli observer che osservano l'evento PropertyChanged
         private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -52,6 +54,7 @@ namespace Client.Views.ViewModels
 
         private async void SignupClicked()
         {
+            //controlli di correttezza dei dati
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
             {
                 await App.Current.MainPage.DisplayAlert("Attenzione!", "Riempire i campi username e password", "Ok");
@@ -67,6 +70,7 @@ namespace Client.Views.ViewModels
 
             if (await RestService.Instance.Signup(Username, Password))
             {
+                //se il signup ha successo setto le credenziali e visualizzo la tabbedpage
                 UserService.Instance.Username = Username;
                 UserService.Instance.Password = Password;
                 App.Current.MainPage = new MainTabbedPage();

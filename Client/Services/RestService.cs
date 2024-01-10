@@ -44,6 +44,7 @@ namespace Client.Services
             });
             if (risposta.IsSuccessStatusCode)
             {
+                //se il login ha successo salvo il token
                 UserService.Instance.Token = await risposta.Content.ReadAsStringAsync();
                 return true;
             }
@@ -60,6 +61,7 @@ namespace Client.Services
             });
             if (risposta.IsSuccessStatusCode)
             {
+                //se il signup ha successo salvo il token
                 UserService.Instance.Token = await risposta.Content.ReadAsStringAsync();
                 return true;
             }
@@ -74,7 +76,7 @@ namespace Client.Services
             {
                 username = UserService.Instance.Username,
                 description = description,
-                image = Convert.ToBase64String(image)
+                image = Convert.ToBase64String(image) //converto i bytes dell'immagine in una stringa base 64
             });
 
             if (risposta.IsSuccessStatusCode)
@@ -85,7 +87,7 @@ namespace Client.Services
 
         public async Task<List<PhotoInfoModel>> GetPosts(string query, int skip)
         {
-
+            //creo l'endpoint corretto
             string endpoint = "get?";
             if (!string.IsNullOrEmpty(query))
                 endpoint += "tag=" + query + "&";
@@ -96,6 +98,7 @@ namespace Client.Services
 
             if (risposta.IsSuccessStatusCode)
             {
+                //resituisco la lista di post scaricati
                 var stringa = await risposta.Content.ReadAsStringAsync();
                 return Utility.DeserializeJSON<List<PhotoInfoModel>>(stringa);
             }
@@ -126,6 +129,7 @@ namespace Client.Services
         {
             try
             {
+                //creo la richiesta
                 HttpRequestMessage richiesta = new HttpRequestMessage
                 {
                     Method = httpVerb,
@@ -133,9 +137,9 @@ namespace Client.Services
                     Content = null
                 };
                 if (!string.IsNullOrEmpty(UserService.Instance.Token))
-                    richiesta.Headers.Add("Authorization", UserService.Instance.Token);
+                    richiesta.Headers.Add("Authorization", UserService.Instance.Token); //aggiungo l'eventuale token, se disponibile
                 if (!string.IsNullOrEmpty(json))
-                    richiesta.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                    richiesta.Content = new StringContent(json, Encoding.UTF8, "application/json"); //aggiungo l'eventuale contenuto
 
                 HttpResponseMessage risposta = await _client.SendAsync(richiesta);
 

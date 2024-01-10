@@ -13,6 +13,7 @@ namespace Client.Views.ViewModels
     {
         private bool isLoading;
 
+        //proprietà per indicare che la finestra sta caricando
         public bool IsLoading
         {
             get => isLoading;
@@ -44,7 +45,7 @@ namespace Client.Views.ViewModels
             Signup = new Command(execute: async () =>
                 {
                     SignupPage page = new SignupPage();
-                    if (!string.IsNullOrEmpty(Username))
+                    if (!string.IsNullOrEmpty(Username)) //se l'utente ha già inserito l'username nel login lo facilito nel signup inserendolo in automatico nella nuova pagina
                         page.BindingContext = new SignupViewModel(Username);
                     await App.Current.MainPage.Navigation.PushAsync(page);
                 }, canExecute: () =>
@@ -55,6 +56,7 @@ namespace Client.Views.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        //metodo per notificare gli observer che osservano l'evento PropertyChanged
         private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -66,6 +68,8 @@ namespace Client.Views.ViewModels
 
             if (await RestService.Instance.Login(Username, Password))
             {
+                //se il login ha successo setto le credenziali e visualizzo la tabbedpage
+
                 UserService.Instance.Username = Username;
                 UserService.Instance.Password = Password;
                 App.Current.MainPage = new MainTabbedPage();

@@ -21,6 +21,7 @@ namespace Client.Services
             }
         }
 
+        //il token per le richieste successive al login/signup
         public string Token { get; set; }
 
         public bool IsUserSigned() => Username != null && Password != null;
