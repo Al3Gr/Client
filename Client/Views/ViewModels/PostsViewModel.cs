@@ -116,8 +116,13 @@ namespace Client.Views.ViewModels
             //se è uguale al precedente non cambio nulla
             if (SearchQuery == queryTag)
                 return;
+            if (string.IsNullOrEmpty(SearchQuery))
+            {
+                pageBinded.BindingContext = new PostsViewModel(pageBinded, "");
+                return;
+            }
             //trovo il tag che metcha la richiesta dell'utente
-            string tag = ImagenetService.Instance.FindTag(queryTag);
+            string tag = ImagenetService.Instance.FindTag(SearchQuery);
             if (string.IsNullOrEmpty(tag))
             {
                 App.Current.MainPage.DisplayAlert("Attenzione!", "Tag inesistente!", "Ok");
