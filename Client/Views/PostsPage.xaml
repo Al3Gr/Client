@@ -43,7 +43,10 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <ImageButton Grid.RowSpan="2" WidthRequest="40" HeightRequest="40" VerticalOptions="Center" Source="{Binding LikeColor}" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PostsViewModel}}, Path=LikePost}" CommandParameter="{Binding .}"/>
+                                <HorizontalStackLayout Grid.RowSpan="2" HorizontalOptions="Start">
+                                    <ImageButton WidthRequest="40" HeightRequest="40" VerticalOptions="Center" Source="{Binding LikeColor}" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PostsViewModel}}, Path=LikePost}" CommandParameter="{Binding .}"/>
+                                    <Label Text="{Binding NLike, StringFormat='Mi piace: {0}'}" TextColor="Blue" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                </HorizontalStackLayout>
 
                                 <Label Grid.Column="1" Text="{Binding TagsString, StringFormat='Tags: {0}'}" TextColor="Blue" FontSize="Small" />
                                 <Label Grid.Column="1" Grid.Row="1" Text="{Binding description, StringFormat='Descrizione: {0}'}" TextColor="Blue" FontSize="Small" />

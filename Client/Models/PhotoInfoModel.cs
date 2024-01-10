@@ -62,14 +62,23 @@ namespace Client.Models
             }
         }
 
-        public ImageSource LikeColor
+        public ImageSource LikeImageSource
         {
             get => HasMyLike ? ImageSource.FromFile("mipiace.png") : ImageSource.FromFile("nomipiace.png");
         }
 
+        public int NLike
+        {
+            get => likes.Count();
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void NotifyHasMyLikeChanged() => NotifyPropertyChanged(nameof(LikeColor));
+        public void NotifyHasMyLikeChanged()
+        {
+            NotifyPropertyChanged(nameof(LikeImageSource));
+            NotifyPropertyChanged(nameof(NLike));
+        }
 
         private void NotifyPropertyChanged(string propertyName)
         {
