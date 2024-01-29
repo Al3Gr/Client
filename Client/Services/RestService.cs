@@ -13,13 +13,17 @@ namespace Client.Services
     public class RestService
     {
         private static RestService _instance;
+        private static object _instanceLock = new object();
         public static RestService Instance
         {
             get
             {
-                if (_instance == null)
-                    _instance = new RestService();
-                return _instance;
+                lock (_instanceLock)
+                {
+                    if (_instance == null)
+                        _instance = new RestService();
+                    return _instance;
+                }
             }
         }
 
@@ -27,7 +31,7 @@ namespace Client.Services
 
         private readonly HttpClient _client;
 
-        public RestService()
+        private RestService()
         {
             _client = new HttpClient()
             {
