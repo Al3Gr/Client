@@ -92,7 +92,7 @@ namespace Client.Services
         public async Task<List<PhotoInfoModel>> GetPosts(string query, int skip)
         {
             //creo l'endpoint corretto
-            string endpoint = "get_photos?";
+            string endpoint = "get_photo?";
             if (!string.IsNullOrEmpty(query))
                 endpoint += "tag=" + query + "&";
             if (skip > 0)
