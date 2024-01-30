@@ -66,7 +66,6 @@ namespace Client.Views.ViewModels
 
         public ICommand Search { get; set; }
         public ICommand SearchMore { get; set; }
-        public ICommand LikePost { get; set; }
 
         public PostsViewModel(Page pageBinded, string queryTag)
         {

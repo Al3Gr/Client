@@ -16,7 +16,6 @@ namespace Client.Models
         public string username { get; set; }
         public string description { get; set; }
         public string url { get; set; }
-        public Dictionary<string, float> tags { get; set; }
 
         //utilizzata dall'interfaccia grafica per visualizzare l'immagine dall'url
         public ImageSource Image
@@ -41,13 +40,10 @@ namespace Client.Models
             get
             {
                 string output = "";
-                if (tags.Count == 0)
+                if (!AdditionalData.ContainsKey("tags"))
                     output = "Non ci sono tag!";
 
-                foreach (string tag in tags.Keys)
-                    output += tag + ": " + tags[tag] + " - ";
-                if (tags.Count > 0)
-                    output = output.Substring(0, output.Length - 3);
+                output = AdditionalData["tags"].ToString();
 
                 return output;
             }
