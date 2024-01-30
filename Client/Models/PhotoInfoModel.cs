@@ -16,8 +16,7 @@ namespace Client.Models
         public string username { get; set; }
         public string description { get; set; }
         public string url { get; set; }
-        public List<string> tags { get; set; }
-        public List<string> likes { get; set; }
+        public Dictionary<string, float> tags { get; set; }
 
         //utilizzata dall'interfaccia grafica per visualizzare l'immagine dall'url
         public ImageSource Image
@@ -26,7 +25,7 @@ namespace Client.Models
             {
                 try
                 {
-                    return ImageSource.FromUri(new Uri(url));
+                    return ImageSource.FromUri(new Uri(RestService.urlServer + "get/" + url));
                 }
                 catch (Exception)
                 {
@@ -45,8 +44,8 @@ namespace Client.Models
                 if (tags.Count == 0)
                     output = "Non ci sono tag!";
 
-                foreach (string tag in tags)
-                    output += tag + " - ";
+                foreach (string tag in tags.Keys)
+                    output += tag + ": " + tags[tag] + " - ";
                 if (tags.Count > 0)
                     output = output.Substring(0, output.Length - 3);
 
@@ -54,38 +53,7 @@ namespace Client.Models
             }
         }
 
-        //restituisce se l'utente loggato ha messo like al post
-        public bool HasMyLike
-        {
-            get
-            {
-                string username = UserService.Instance.Username;
-                if (username == null)
-                    return false;
-                return likes.Contains(username);
-            }
-        }
-
-        //utilizzata dall'interfaccia grafica per visualizzare la presenza del proprio like
-        public ImageSource LikeImageSource
-        {
-            get => HasMyLike ? ImageSource.FromFile("mipiace.png") : ImageSource.FromFile("nomipiace.png");
-        }
-
-        //utilizzata dall'interfaccia grafica per visualizzare il numero di like del post
-        public int NLike
-        {
-            get => likes.Count();
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
-
-        //utilizzata dalla view model per notificare i cambiamenti delle informazioni sui like del post
-        public void NotifyHasMyLikeChanged()
-        {
-            NotifyPropertyChanged(nameof(LikeImageSource));
-            NotifyPropertyChanged(nameof(NLike));
-        }
 
         //metodo per notificare gli observer che osservano l'evento PropertyChanged
         private void NotifyPropertyChanged(string propertyName)

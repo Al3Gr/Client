@@ -27,7 +27,7 @@ namespace Client.Services
             }
         }
 
-        private const string urlServer = "http://localhost:1984/";
+        public const string urlServer = "http://localhost:80/";
 
         private readonly HttpClient _client;
 
@@ -41,7 +41,7 @@ namespace Client.Services
 
         public async Task<bool> Login(string username, string password)
         {
-            HttpResponseMessage risposta = await TalkWithServerJson(HttpMethod.Post, urlServer + "login", new UserModel
+            HttpResponseMessage risposta = await TalkWithServerJson(HttpMethod.Post, urlServer + "users/login", new UserModel
             {
                 username = username,
                 password = password
@@ -58,7 +58,7 @@ namespace Client.Services
 
         public async Task<bool> Signup(string username, string password)
         {
-            HttpResponseMessage risposta = await TalkWithServerJson(HttpMethod.Post, urlServer + "signup", new UserModel
+            HttpResponseMessage risposta = await TalkWithServerJson(HttpMethod.Post, urlServer + "users/signup", new UserModel
             {
                 username = username,
                 password = password
@@ -75,30 +75,30 @@ namespace Client.Services
 
         public async Task<bool> UploadImage(string description, byte[] image)
         {
-
-            HttpResponseMessage risposta = await TalkWithServerJson(HttpMethod.Post, urlServer + "upload", new ImageUploadModel
+            using (var content = new MultipartFormDataContent())
             {
-                username = UserService.Instance.Username,
-                description = description,
-                image = Convert.ToBase64String(image) //converto i bytes dell'immagine in una stringa base 64
-            });
+                content.Add(new StringContent(description, Encoding.UTF8, "application/text"), "description");
+                content.Add(new StreamContent(new MemoryStream(image)), "image", "image.jpg");
 
-            if (risposta.IsSuccessStatusCode)
-                return true;
-            else
-                return false;
+                HttpResponseMessage risposta = await TalkWithServerJson(HttpMethod.Post, urlServer + "photos/upload", content);
+
+                if (risposta.IsSuccessStatusCode)
+                    return true;
+                else
+                    return false;
+            }
         }
 
         public async Task<List<PhotoInfoModel>> GetPosts(string query, int skip)
         {
             //creo l'endpoint corretto
-            string endpoint = "get?";
+            string endpoint = "get_photos?";
             if (!string.IsNullOrEmpty(query))
                 endpoint += "tag=" + query + "&";
             if (skip > 0)
                 endpoint += "skip=" + skip;
 
-            HttpResponseMessage risposta = await TalkWithServer(HttpMethod.Get, urlServer + endpoint);
+            HttpResponseMessage risposta = await TalkWithServer(HttpMethod.Get, urlServer + "photos/" + endpoint);
 
             if (risposta.IsSuccessStatusCode)
             {
@@ -108,21 +108,6 @@ namespace Client.Services
             }
             else
                 throw new RestServiceException(risposta);
-        }
-
-        public async Task<bool> LikePost(string id, bool like)
-        {
-
-            HttpResponseMessage risposta = await TalkWithServerJson(HttpMethod.Put, urlServer + "like", new LikePostModel()
-            {
-                id = id,
-                like = like ? "1" : "0"
-            });
-
-            if (risposta.IsSuccessStatusCode)
-                return true;
-            else
-                return false;
         }
 
         // --------------- Talk with server ---------------
@@ -154,6 +139,31 @@ namespace Client.Services
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
         }
+
+        private async Task<HttpResponseMessage> TalkWithServerMultiPartFormData(HttpMethod httpVerb, string url, MultipartFormDataContent content)
+        {
+            try
+            { 
+                //creo la richiesta
+                HttpRequestMessage richiesta = new HttpRequestMessage
+                {
+                    Method = httpVerb,
+                    RequestUri = new Uri(url),
+                    Content = content
+                };
+                if (!string.IsNullOrEmpty(UserService.Instance.Token))
+                    richiesta.Headers.Add("Authorization", UserService.Instance.Token); //aggiungo l'eventuale token, se disponibile
+                
+                HttpResponseMessage risposta = await _client.SendAsync(richiesta);
+
+                return risposta;
+            }
+            catch (Exception e)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+        }
+
 
 
     }

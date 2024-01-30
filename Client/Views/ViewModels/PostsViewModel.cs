@@ -77,7 +77,6 @@ namespace Client.Views.ViewModels
 
             Search = new Command(SearchClicked);
             SearchMore = new Command(SearchMoreHandler);
-            LikePost = new Command(LikePostHandler);
 
             DownloadPost(0);
         }
@@ -136,30 +135,6 @@ namespace Client.Views.ViewModels
         {
             //scarico i nuovi post, ogni get restituisce gli ultimi dieci risultati quindi lo skip è di 10
             DownloadPost((++pageNumber) * 10);
-        }
-
-        private async void LikePostHandler(object sender)
-        {
-            //prendo il post da cui è stato cliccato il tasto like
-            PhotoInfoModel post = sender as PhotoInfoModel;
-
-            if (post == null)
-                return;
-
-            bool like = !post.HasMyLike;
-            if (await RestService.Instance.LikePost(post._id.Id, like))
-            {
-                //se l'operazione và a buon fine aggiungo o rimuovo il like nell'applicazione
-                if (like)
-                    post.likes.Add(UserService.Instance.Username);
-                else
-                    post.likes.Remove(UserService.Instance.Username);
-
-                //notifico alla GUI
-                post.NotifyHasMyLikeChanged();
-            }
-            else
-                await App.Current.MainPage.DisplayAlert("Attenzione", "Qualcosa è andata storto!", "Ok");
         }
 
         //utilizzato per refreshare tutta la pagina con gli ultimi contenuti più attuali
