@@ -77,10 +77,10 @@ namespace Client.Services
         {
             using (var content = new MultipartFormDataContent())
             {
-                content.Add(new StringContent(description), "description");
+                content.Add(new StringContent(description, Encoding.UTF8, "application/text"), "description");
                 content.Add(new StreamContent(new MemoryStream(image)), "image");
                 
-                HttpResponseMessage risposta = await TalkWithServerJson(HttpMethod.Post, urlServer + "photos/upload", content);
+                HttpResponseMessage risposta = await TalkWithServerMultiPartFormData(HttpMethod.Post, urlServer + "photos/upload", content);
 
                 if (risposta.IsSuccessStatusCode)
                     return true;
@@ -151,6 +151,7 @@ namespace Client.Services
                     RequestUri = new Uri(url),
                     Content = content
                 };
+                
                 if (!string.IsNullOrEmpty(UserService.Instance.Token))
                     richiesta.Headers.Add("Authorization", UserService.Instance.Token); //aggiungo l'eventuale token, se disponibile
                 
