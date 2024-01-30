@@ -41,7 +41,7 @@ namespace Client.Models
             {
                 string output = "";
                 if (!AdditionalData.ContainsKey("tags"))
-                    output = "Non ci sono tag!";
+                    return "Non ci sono tag!";
 
                 output = AdditionalData["tags"].ToString();
 
